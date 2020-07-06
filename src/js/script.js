@@ -60,9 +60,11 @@
       thisProduct.data = data;
 
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
-      thisProduct.processOrder();
+      // thisProduct.processOrder();
+
 
       console.log('new Product:', thisProduct);
     }
@@ -94,7 +96,7 @@
       /* find the clickable trigger (the element that should react to clicking) */
 
       const clickableTrigger = thisProduct.accordionTrigger;
-
+      console.log(thisProduct);
       /* START: click event listener to trigger */
 
       clickableTrigger.addEventListener('click', function(){
@@ -105,7 +107,7 @@
 
         /* toggle active class on element of thisProduct */
 
-        thisProduct.element.classList.toggle('product__header');
+        thisProduct.element.classList.toggle('active');
 
         /* find all active products */
 
@@ -182,7 +184,7 @@
 
           /* save the element in param.options with key optionId as const option */
 
-          const option = param.options(optionId);
+          const option = param.options[optionId];
 
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
 
@@ -195,8 +197,10 @@
             /* add price of option to variable price */
 
 
+            price += thisProduct.data.params[paramId].optionSelected[optionId].price;
+            console.log(price);
 
-          /* END IF: if option is selected and option is not default */
+            /* END IF: if option is selected and option is not default */
 
           }
 
@@ -208,21 +212,21 @@
 
 
 
-          /* END ELSE IF: if option is not selected and option is default */
+            /* END ELSE IF: if option is not selected and option is default */
 
           }
 
-        /* END LOOP: for each optionId in param.options */
+          /* END LOOP: for each optionId in param.options */
 
         }
 
-      /* END LOOP: for each paramId in thisProduct.data.params */
+        /* END LOOP: for each paramId in thisProduct.data.params */
 
       }
 
       /* set the contents of thisProduct.priceElem to be the value of variable price */
 
-      let price2 = thisProduct.priceElem;
+      // let price2 = thisProduct.priceElem;
 
     }
   }
