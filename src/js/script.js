@@ -63,10 +63,11 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
-      // thisProduct.processOrder();
+      thisProduct.initAmountWidget();
+      thisProduct.processOrder();
 
 
-      console.log('new Product:', thisProduct);
+       console.log('new Product:', thisProduct);
     }
 
     renderInMenu() {
@@ -79,6 +80,12 @@
       menuContainer.appendChild(thisProduct.element);
     }
 
+    initAmountWidget(){
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+    }
+
     getElements() {
       const thisProduct = this;
 
@@ -87,6 +94,8 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAccordion(){
@@ -197,8 +206,7 @@
             /* add price of option to variable price */
 
 
-            price += thisProduct.data.params[paramId].optionSelected[optionId].price;
-            console.log(price);
+            price += option.price;
 
             /* END IF: if option is selected and option is not default */
 
@@ -210,11 +218,28 @@
 
             /* deduct price of option from price */
 
-
+            price -= option.price;
 
             /* END ELSE IF: if option is not selected and option is default */
 
           }
+
+          const pizzaImages = '.' + paramId + '-' + optionId;
+
+          const pizzaOptions = thisProduct.imageWrapper.querySelectorAll(pizzaImages);
+
+          if (optionSelected && !option.default){
+
+            for (let pizzaOption of pizzaOptions){
+              pizzaOption.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else {
+            for (let pizzaOption of pizzaOptions){
+              pizzaOption.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
+
+
 
           /* END LOOP: for each optionId in param.options */
 
@@ -226,16 +251,52 @@
 
       /* set the contents of thisProduct.priceElem to be the value of variable price */
 
-      // let price2 = thisProduct.priceElem;
+      let price2 = thisProduct.priceElem;
 
     }
   }
+
+  class AmountWidget{
+    constructor(element){
+      const thisWidget = this;
+
+      thisWidget.getElements(element);
+      thisWidget.setValue(thisWidget.input.value);
+
+      console.log('AmountWidget:', thisWidget);
+      console.log('constructor arguments:', element);
+    }
+  }
+
+    getElements(element){
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value){
+      const thisWidget = this;
+
+      const newValue = parseInt(value);
+
+      thisWidget.value = newValue;
+      thisWidget.input.value = thisWidget.value;
+    }
+
+    // initActions(){
+    //   const thisWidget - this;
+
+    //   thisWidget.input.addEventListener('change', function)
+    // }
 
   const app = {
     initMenu: function(){
       const thisApp = this;
 
-      console.log('thisApp.data', thisApp.data);
+      // console.log('thisApp.data', thisApp.data);
 
       for(let productData in thisApp.data.products){
         new Product(productData, thisApp.data.products[productData]);
@@ -250,11 +311,11 @@
 
     init: function(){
       const thisApp = this;
-      console.log('*** App starting ***');
-      console.log('thisApp:', thisApp);
-      console.log('classNames:', classNames);
-      console.log('settings:', settings);
-      console.log('templates:', templates);
+      // console.log('*** App starting ***');
+      // console.log('thisApp:', thisApp);
+      // console.log('classNames:', classNames);
+      // console.log('settings:', settings);
+      // console.log('templates:', templates);
 
       thisApp.initData();
       thisApp.initMenu();
