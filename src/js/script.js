@@ -193,6 +193,7 @@
       thisProduct.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
 
@@ -205,6 +206,8 @@
       // console.log('formData', formData);
 
       /* set variable price to equal thisProduct.data.price */
+
+      thisProduct.params = {};
 
       let price = thisProduct.data.price;
 
@@ -258,6 +261,13 @@
           const pizzaOptions = thisProduct.imageWrapper.querySelectorAll(pizzaImages);
 
           if (optionSelected && !option.default){
+            if (!thisProduct.params[paramId]) {
+              thisProduct.params[paramId] = {
+                label: param.label,
+                options: {},
+              };
+            }
+            thisProduct.params[paramId].options[optionId] = option.label;
 
             for (let pizzaOption of pizzaOptions){
               pizzaOption.classList.add(classNames.menuProduct.imageVisible);
@@ -279,11 +289,22 @@
       }
 
       /* set the contents of thisProduct.priceElem to be the value of variable price */
-      price *= thisProduct.amountWidget.value;
-      thisProduct.priceElem = price;
+      thisProduct.priceSingle = price;
+      thisProduct.price = thisProduct.priceSingle * thisProduct.amountWidget.value;
 
+      thisProduct.priceElem.innerHTML = thisProduct.price;
 
+      // price *= thisProduct.amountWidget.value;
+      // thisProduct.priceElem.innerHTML = price;
+    }
 
+    addToCart(){
+      const thisProduct = this;
+
+      thisProduct.name = thisProduct.data.name;
+      thisProduct.amount = thisProduct.amountWidget.value;
+
+      app.cart.add(thisProduct);
     }
   }
 
@@ -359,6 +380,7 @@
 
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(select.cart.toggleTrigger);
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(select.cart.productList);
     }
 
     initActions(){
@@ -367,6 +389,18 @@
       thisCart.dom.toggleTrigger.addEventListener('click', function(){
         thisCart.dom.wrapper.classList.toggle('active');
       });
+    }
+
+    add(menuProduct){
+      const thisCart = this;
+
+      const generatedHTML = templates.cartProduct(menuProduct);
+
+      const generatedDOM = utils.createDOMFromHTML(generatedHTML);
+
+      thisCart.dom.productList.appendChild(generatedDOM);
+
+      console.log('adding product:', menuProduct);
     }
   }
 
