@@ -67,7 +67,7 @@
       thisProduct.processOrder();
 
 
-       console.log('new Product:', thisProduct);
+      console.log('new Product:', thisProduct);
     }
 
     renderInMenu() {
@@ -84,6 +84,9 @@
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder();
+      });
     }
 
     getElements() {
@@ -250,8 +253,10 @@
       }
 
       /* set the contents of thisProduct.priceElem to be the value of variable price */
+      price *= thisProduct.amountWidget.value;
+      thisProduct.priceElem = price;
 
-      let price2 = thisProduct.priceElem;
+
 
     }
   }
@@ -261,12 +266,13 @@
       const thisWidget = this;
 
       thisWidget.getElements(element);
+      thisWidget.value = settings.amountWidget.defaultValue;
       thisWidget.setValue(thisWidget.input.value);
 
       console.log('AmountWidget:', thisWidget);
       console.log('constructor arguments:', element);
     }
-  }
+
 
     getElements(element){
       const thisWidget = this;
@@ -283,16 +289,34 @@
       const newValue = parseInt(value);
 
       thisWidget.value = newValue;
+      thisWidget.announce();
+      if(
+        newValue >= settings.amountWidget.defaultMin &&
+        newValue <= settings.amountWidget.defaultMax
+      )
+        thisWidget.value = newValue;
+
       thisWidget.input.value = thisWidget.value;
     }
 
-    // initActions(){
-    //   const thisWidget - this;
+    initActions(){
+      const thisWidget = this;
 
-    //   thisWidget.input.addEventListener('change', function)
-    // }
+      thisWidget.input.addEventListener('change', function(){thisWidget.setValue(thisWidget.input.value);});
+      thisWidget.linkDecrease.addEventListener('click', function(){thisWidget.setValue(thisWidget.value - 1);});
+      thisWidget.linkIncrease.addEventListener('click', function (){thisWidget.setValue(thisWidget.value + 1);});
+    }
+
+    announce(){
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
+  }
 
   const app = {
+
     initMenu: function(){
       const thisApp = this;
 
