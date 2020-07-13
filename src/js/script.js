@@ -149,7 +149,7 @@
 
         /* find all active products */
 
-        const activeProducts = document.querySelectorAll('product', 'active');
+        const activeProducts = document.querySelectorAll(select.all.menuProductsActive);
 
         /* START LOOP: for each active product */
 
@@ -451,7 +451,7 @@
       console.log('newCartProduct', thisCartProduct);
     }
 
-    getElements(){
+    getElements(element){
       const thisCartProduct = this;
 
       thisCartProduct.dom = {};
