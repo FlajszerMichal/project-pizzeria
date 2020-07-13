@@ -272,7 +272,7 @@
             for (let pizzaOption of pizzaOptions){
               pizzaOption.classList.add(classNames.menuProduct.imageVisible);
             }
-          } else {
+          } else{
             for (let pizzaOption of pizzaOptions){
               pizzaOption.classList.remove(classNames.menuProduct.imageVisible);
             }
@@ -287,13 +287,13 @@
         /* END LOOP: for each paramId in thisProduct.data.params */
 
       }
-
+      console.log(thisProduct.amountWidget);
       /* set the contents of thisProduct.priceElem to be the value of variable price */
       thisProduct.priceSingle = price;
       thisProduct.price = thisProduct.priceSingle * thisProduct.amountWidget.value;
-
+      console.log(thisProduct.amountWidget.value);
       thisProduct.priceElem.innerHTML = thisProduct.price;
-
+      console.log(thisProduct.price);
       // price *= thisProduct.amountWidget.value;
       // thisProduct.priceElem.innerHTML = price;
     }
@@ -335,15 +335,16 @@
 
       const newValue = parseInt(value);
 
-      thisWidget.value = newValue;
+
       thisWidget.announce();
       if(
         newValue >= settings.amountWidget.defaultMin &&
         newValue <= settings.amountWidget.defaultMax
-      )
+      ){
         thisWidget.value = newValue;
-
+      }
       thisWidget.input.value = thisWidget.value;
+
     }
 
     initActions(){
