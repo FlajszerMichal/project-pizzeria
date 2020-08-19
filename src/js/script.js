@@ -192,47 +192,57 @@
 
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
 
-          // if(optionSelected && !option.default){
-          //   price += option.price;
-          //   console.log("price:", price);
-          // } else if (!optionSelected && !option.default){
-          //   price -= option.price;
-          // }
-
-          const pizzaImages = '.' + paramId + '-' + optionId;
-
-          const pizzaOptions = thisProduct.imageWrapper.querySelectorAll(pizzaImages);
-
-          if (optionSelected && !option.default){
+          if(optionSelected && !option.default){
             price += option.price;
-
-            if (!thisProduct.params[paramId]) {
-
-              thisProduct.params[paramId] = {
-                label: param.label,
-                options: {},
-              };
-            }
-            thisProduct.params[paramId].options[optionId] = option.label;
-
-            for (let pizzaOption of pizzaOptions){
-              pizzaOption.classList.add(classNames.menuProduct.imageVisible);
-            }
-          } else if (!optionSelected && !option.default){
+            console.log('price:', price);
+          } else if (!optionSelected && option.default){
             price -= option.price;
-            for (let pizzaOption of pizzaOptions){
-              pizzaOption.classList.remove(classNames.menuProduct.imageVisible);
+          }
+
+          if(optionSelected){
+            for(let image of thisProduct.imageWrapper.querySelectorAll(`.${paramId}-${optionId}`)){
+              image.classList.add(classNames.menuProduct.imageVisible);
+            }
+          } else {
+            for(let image of thisProduct.imageWrapper.querySelectorAll(`.${paramId}-${optionId}`)){
+              image.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
+
+          // const pizzaImages = '.' + paramId + '-' + optionId;
+
+          // const pizzaOptions = thisProduct.imageWrapper.querySelectorAll(pizzaImages);
+
+          // if (optionSelected && !option.default){
+          //   price += option.price;
+
+          //   if (!thisProduct.params[paramId]) {
+
+          //     thisProduct.params[paramId] = {
+          //       label: param.label,
+          //       options: {},
+          //     };
+          //   }
+          //   thisProduct.params[paramId].options[optionId] = option.label;
+
+          //   for (let pizzaOption of pizzaOptions){
+          //     pizzaOption.classList.add(classNames.menuProduct.imageVisible);
+          //   }
+          // } else if (!optionSelected && !option.default){
+          //   price -= option.price;
+          //   for (let pizzaOption of pizzaOptions){
+          //     pizzaOption.classList.remove(classNames.menuProduct.imageVisible);
+          //   }
+          // }
         }
       }
-      console.log(thisProduct.amountWidget);
-      thisProduct.price = thisProduct.data.price * thisProduct.amountWidget.value;
-      console.log(thisProduct.amountWidget.value);
-      thisProduct.priceElem.innerHTML = thisProduct.price;
-      console.log(thisProduct);
+      // console.log(thisProduct.amountWidget);
+      // thisProduct.price = thisProduct.data.price * thisProduct.amountWidget.value;
+      // console.log(thisProduct.amountWidget.value);
+      // thisProduct.priceElem.innerHTML = thisProduct.price;
+      // console.log(thisProduct);
       // price *= thisProduct.amountWidget.value;
-      // thisProduct.priceElem.innerHTML = price;
+      thisProduct.priceElem.innerHTML = price;
     }
 
     addToCart(){
