@@ -364,7 +364,7 @@
       const thisCart = this;
 
       const generatedHTML = templates.cartProduct(menuProduct);
-      menuProduct.price = Number(menuProduct.priceElem.innerText);
+      menuProduct.price = Number(menuProduct.priceElem.innerText); // brzydki hack wynikający z wcześniejszego błędu
       thisCart.products.push(menuProduct);
 
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
@@ -382,7 +382,7 @@
       thisCart.subtotalPrice = 0;
 
       for (let product of thisCart.products){
-        thisCart.subtotalPrice = thisCart.subtotalPrice + product.price * product.amount;
+        thisCart.subtotalPrice = thisCart.subtotalPrice + product.price;
         thisCart.totalNumber = thisCart.totalNumber + product.amount;
       }
 
