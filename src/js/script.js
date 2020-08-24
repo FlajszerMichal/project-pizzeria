@@ -262,6 +262,7 @@
       thisWidget.getElements(element);
       thisWidget.value = settings.amountWidget.defaultValue;
       thisWidget.setValue(thisWidget.input.value);
+      thisWidget.initActions();
 
       // console.log('AmountWidget:', thisWidget);
       // console.log('constructor arguments:', element);
@@ -298,8 +299,12 @@
       const thisWidget = this;
 
       thisWidget.input.addEventListener('change', function(){thisWidget.setValue(thisWidget.input.value);});
-      thisWidget.linkDecrease.addEventListener('click', function(){thisWidget.setValue(thisWidget.value - 1);});
-      thisWidget.linkIncrease.addEventListener('click', function (){thisWidget.setValue(thisWidget.value + 1);});
+      thisWidget.linkDecrease.addEventListener('click', function(){
+        thisWidget.setValue(thisWidget.value - 1);
+      });
+      thisWidget.linkIncrease.addEventListener('click', function (){
+        thisWidget.setValue(thisWidget.value + 1);
+      });
     }
 
     announce(){
@@ -347,13 +352,22 @@
       });
     }
 
+    // const thisProduct = this;
+    // const generatedHTML = templates.menuProduct(thisProduct.data);
+    //
+    // thisProduct.element = utils.createDOMFromHTML(generatedHTML);
+    //
+    // const menuContainer = document.querySelector(select.containerOf.menu);
+    // menuContainer.appendChild(thisProduct.element);
+
     add(menuProduct){
       const thisCart = this;
 
+      const generatedHTML = templates.cartProduct(menuProduct);
+      menuProduct.price = Number(menuProduct.priceElem.innerText);
+      thisCart.products.push(menuProduct);
+
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
-
-      const generatedHTML = templates.cartProduct(new CartProduct(menuProduct, generatedDOM));
-
 
       thisCart.dom.productList.appendChild(generatedDOM);
       thisCart.update();
@@ -368,8 +382,8 @@
       thisCart.subtotalPrice = 0;
 
       for (let product of thisCart.products){
-        thisCart.subtotalPrice + product.price;
-        thisCart.totalNumber + product.amount;
+        thisCart.subtotalPrice = thisCart.subtotalPrice + product.price * product.amount;
+        thisCart.totalNumber = thisCart.totalNumber + product.amount;
       }
 
       thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
